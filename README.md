@@ -1,1 +1,2 @@
-# treasureearn-v2
+# TreasureEarn
+

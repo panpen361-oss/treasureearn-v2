@@ -1,0 +1,1506 @@
+﻿Yêu cầu chỉnh sửa website TreasureEarn
+
+
+---
+
+
+### Ghi chú chung cho Developer
+Mấy phần backend nếu có cái nào không cần thiết hoặc thiếu cái quan trọng cho website dạng GPT thì báo lại cho tui để chỉnh sửa hoặc xoá/bổ sung. Tui chưa quen hết quy trình hệ thống kiểu này nên nếu cần thêm logic, cấu trúc, hoặc API gì thì cứ nói tui để tui học thêm.
+
+
+Ngoài ra nhớ setup giúp tui postback + callback system để khi tui apply offerwall thì họ có thể gửi dữ liệu về site. Mục tiêu là để site tự động pull:
+- Offer list
+- Task data
+- Reward amount
+- Status completion
+- Offer images
+- Descriptions
+
+
+Postback phải có:
+- Verification token / secret key
+- Fraud protection
+- Duplicate prevention
+- Status validation
+- Logging
+
+
+---
+
+
+### 1. Trang Withdraw
+
+
+Làm lại phần Withdraw layout giống kiểu web GPT hiện đại.
+
+
+Yêu cầu
+
+
+- Bỏ sidebar cashout hiện tại.
+- Đổi thành layout dạng ví tiền ở giữa màn hình (style hiện đại).
+- Chia withdraw option theo từng loại:
+
+
+Special
+- Chưa có
+
+
+Crypto
+- Litecoin  
+- Solana  
+- Ethereum  
+
+
+Gift Cards
+- Roblox  
+- Steam  
+- Valorant  
+- PlayStation  
+- Nike  
+- DoorDash  
+
+
+Cash
+- PayPal  
+- Visa Virtual  
+- ACH  
+
+
+Design
+- Icon crypto style đồng bộ.
+- UI gọn, hiện đại, responsive mobile + desktop.
+- Theme đen + vàng.
+- Icon phải dùng nguồn hợp lệ (không vi phạm bản quyền).
+
+
+---
+
+
+### 2. Offer Box UI
+
+
+Chỉnh lại UI offer box cho gọn và đẹp hơn.
+
+
+Yêu cầu
+- Giảm padding + spacing.
+- Reward hiển thị gọn.
+- Bỏ chữ “GC”.
+- Layout dạng grid rõ ràng.
+- Hover effect nhẹ.
+- Skeleton loading khi load offer.
+
+
+---
+
+
+### 3. Bộ Filter Offers
+
+
+Làm lại filter gọn và đặt cạnh search bar.
+
+
+Filters
+
+
+Earn On
+- Android
+- iPhone
+- Desktop
+(có icon)
+
+
+Sort By
+- Highest offers
+- Lowest offers
+
+
+Categories
+- View all
+- Trial
+- Casino
+- Purchase
+- Crypto
+- Game
+- Sign up
+
+
+Providers
+- Torox
+- AdGem
+- BitLabs
+- RevU
+- AdscendMedia
+- AdToWall
+- PrimeEarn
+- WaxRewards
+- Lootably
+- AyetStudios
+- MyChips
+- Besitos
+
+
+Behavior
+- Cho phép chọn nhiều filter cùng lúc (trừ sort).
+- Filter update realtime không reload trang.
+- URL query sync filter state.
+
+
+---
+
+
+### 4. UI Trang
+
+
+- Chỉnh lại trang Earn nhìn hiện đại hơn.
+- Chỉnh lại phần Rewards
+  - Box nhỏ hơn
+  - Gọn hơn
+  - Dễ đọc hơn
+  - Có animation nhẹ khi hover
+
+
+---
+
+
+### 5. Security + Routes
+
+
+Kiểm tra toàn bộ routes từ admin → user.
+
+
+Yêu cầu
+- User không truy cập được admin routes.
+- Middleware auth cho admin.
+- API key không được expose frontend.
+- Protect postback endpoints.
+
+
+Phải chống được
+- DDoS
+- XSS
+- SQL Injection
+- Token steal
+- Script injection
+- API abuse
+- Replay attacks
+- Fake completion spam
+
+
+---
+
+
+### 6. Blog
+
+
+Trang blog để admin đăng bài cho user đọc.
+
+
+Chức năng
+- Admin tạo/sửa/xóa bài
+- SEO URL slug
+- Pagination
+- Thumbnail
+- Draft mode
+- Publish schedule
+
+
+---
+
+
+### 7. Tasks Section
+
+
+Chỉnh UI nhiệm vụ cho dễ nhìn và trực quan hơn.  
+(Tui sẽ gửi ví dụ sau.)
+
+
+---
+
+
+### 8. Hệ thống Risk Detection (Admin Only)
+
+
+Thêm hệ thống đánh giá rủi ro account.
+
+
+Risk Level
+- 1–5% → Bình thường
+- 6–15% → Bất thường
+- 15–100% → Nguy hiểm
+
+
+Tiêu chí tính điểm
+- Chargeback rate
+- IP thay đổi liên tục
+- VPN / proxy detection
+- Hành vi bất thường
+- Abuse pattern
+- Device fingerprint mismatch
+- Rapid task completion
+
+
+Hành động
+- Auto flag
+- Yêu cầu KYC verification
+- Add review list
+- Ban nếu cần
+
+
+---
+
+
+### 9. Admin Moderation Controls
+
+
+Thêm công cụ admin:
+
+
+- Ban
+- Unban
+- Status label:
+  - High Risk
+  - Medium Risk
+  - Low Risk
+  - Banned
+
+
+Hiển thị trong Withdraw approval page để admin review trước khi duyệt.
+
+
+---
+
+
+### 10. Hệ thống Backend cần có
+
+
+Phải đảm bảo có:
+
+
+- Admin action logs
+- Transaction ledger system
+- Offer completion logs
+- Webhook logs
+- Rate limit API
+- Anti spam logic
+- CSRF protection
+- Secure session
+- Error monitoring
+- Backup database
+- Validation layer
+- Queue system cho callback xử lý async
+
+
+---
+
+
+### 11. Performance
+
+
+- Load < 2s
+- Query tối ưu
+- Không memory leak
+- API response nhanh
+- Lazy load images + offers
+
+
+---
+
+
+### 12. Code Quality
+
+
+- Code sạch
+- Không duplicate function
+- Không duplicate route
+- Comment logic quan trọng
+- Type safe
+- Tách service layer rõ ràng
+
+
+---
+  
+
+  
+
+Dưới đây là SPEC gửi dev (copy/paste được), chia P0/P1/P2 + deliverables rõ ràng cho TreasureEarn (GPT site). Mình viết theo kiểu dev restart đọc là biết làm gì trước gì sau. (CHATGPT)
+CÁI NÀY LÀ MÌNH NHỜ CHATGPT GHI NHỮNG THỨ GET PAID TO WEBSITE CẦN ĐỂ CHO BẠN, BẠN CỨ LÀM THEO CÁCH CỦA BẠN ĐỂ BẠN BUILD CHO DỄ.
+________________
+* SPEC: TreasureEarn (Get-Paid-To Platform) – Restart Requirements
+Goal
+Build a production-ready GPT website with:
+* Ledger-based balances (available/pending/locked)
+
+* Offer click tracking + postback system (auto credit)
+
+* Withdraw workflow (user request → admin review → payout)
+
+* Security + anti-fraud baseline
+
+* Modern black + gold UI
+
+________________
+
+
+P0 (Must-have để chạy được + apply offerwalls)
+1) Auth + Account
+Pages
+   * /register, /login, /logout
+
+   * /verify (email verification)
+
+   * /profile (basic info)
+
+Backend
+      * Secure session via httpOnly cookies (JWT or session)
+
+      * Email verification required to withdraw / cashout
+
+      * Basic user model: email, username, createdAt, status, role, referralCode (optional)
+
+UX
+         * Block withdraw if not verified → show popup/toast “Verify email to withdraw”.
+
+________________
+
+
+2) Balance / Ledger System (Core)
+Balances
+            * available_balance
+
+            * pending_balance
+
+            * locked_balance (hold)
+
+            * lifetime_earned, lifetime_withdrawn
+
+Ledger
+               * Every balance change must create an immutable ledger record.
+
+               * Must support idempotency key (prevent double credit).
+
+Ledger event types
+                  * earn_pending
+
+                  * earn_approved (move pending → available)
+
+                  * earn_denied/chargeback (revert/clawback)
+
+                  * withdraw_request
+
+                  * withdraw_approve
+
+                  * withdraw_deny
+
+                  * hold_add / hold_release
+
+                  * admin_adjust
+
+________________
+
+
+3) Offer System (Offer list + Offer detail + click tracking)
+Offer list
+                     * Pull offers from providers (server-side). Cache/revalidate to avoid spam.
+
+                     * Search + filters (yours) with URL query sync.
+
+                     * Skeleton loading.
+
+Offer detail
+                        * Description/terms + steps/tasks if provider supports.
+
+                        * “Start Offer” button triggers click session.
+
+Click session tracking (MUST)
+                           * When user clicks start:
+
+                              * create session record with: userId, provider, offerId, clickId/sessionId, IP/device fingerprint (basic), createdAt
+
+                              * redirect to provider tracking link including clickId/subid
+
+                                 * Without click tracking, postback fraud detection will be weak.
+
+________________
+
+
+4) Postback / Callback System (Critical)
+Requirement: provider must be able to send events back
+Endpoints
+                                    * One unified endpoint or per-provider endpoints.
+
+                                    * Must verify provider secret (token/HMAC/IP allowlist depending on provider).
+
+Must store
+                                       * raw payload + headers
+
+                                       * provider name
+
+                                       * eventId (unique)
+
+                                       * clickId/subId
+
+                                       * offerId
+
+                                       * status (pending/approved/denied/chargeback)
+
+                                       * payout amount
+
+                                       * timestamp
+
+Must enforce
+                                          * Duplicate prevention: unique index on (provider + eventId)
+
+                                          * Status validation: do NOT accept approved without a known click session (or mark suspicious & hold)
+
+                                          * Rate limiting on postback routes
+
+                                          * Logging + audit trail
+
+Async processing
+                                             * Postback endpoint should enqueue job and respond fast.
+
+                                             * Worker updates ledger + balances.
+
+Balance rules
+                                                * pending → add to pending_balance
+
+                                                * approved → move pending → available
+
+                                                * denied/chargeback → clawback/revert with ledger record
+
+________________
+
+
+5) Withdraw System (User + Admin)
+User
+                                                   * Cashout page redesigned wallet-center layout (black + gold)
+
+                                                   * Methods categories:
+
+                                                      * Crypto: LTC, SOL, ETH
+
+                                                      * Giftcards: Roblox, Steam, Valorant, PlayStation, Nike, DoorDash
+
+                                                      * Cash: PayPal, Visa Virtual, ACH
+
+                                                         * Minimum payout + fee per method (config)
+
+                                                         * Withdraw history with statuses
+
+Hard rules
+                                                            * If available_balance == 0 → popup:
+
+                                                               * show available/pending/locked
+
+                                                               * CTA: “View activity” / “Earn offers”
+
+                                                                  * Only allow withdraw if:
+
+                                                                     * email verified
+
+                                                                     * account not banned
+
+                                                                     * passes risk gate (even basic)
+
+Admin
+                                                                        * Withdraw approval queue:
+
+                                                                           * user info + risk label
+
+                                                                           * recent offer completions
+
+                                                                           * recent IP changes
+
+                                                                              * Approve/Deny with reason
+
+                                                                              * Log every admin action
+
+________________
+
+
+6) Route Protection + Secrets
+                                                                                 * Users cannot access /admin routes
+
+                                                                                 * Admin middleware/proxy for admin pages + admin APIs
+
+                                                                                 * API keys/secrets never exposed to frontend
+
+                                                                                 * Protect postback endpoints (secret verification + rate limit)
+
+                                                                                 * Basic security headers (CSP basic OK)
+
+________________
+
+
+P1 (Strongly recommended for real GPT ops)
+7) Risk Detection (Admin only)
+Risk score
+                                                                                    * 1–5% normal
+
+                                                                                    * 6–15% suspicious
+
+                                                                                    * 15–100% dangerous
+
+Signals
+                                                                                       * VPN/proxy detection
+
+                                                                                       * rapid completions
+
+                                                                                       * device mismatch
+
+                                                                                       * repeated chargebacks
+
+                                                                                       * multiple accounts signals
+
+Actions
+                                                                                          * auto flag
+
+                                                                                          * auto hold earnings
+
+                                                                                          * require KYC flag
+
+                                                                                          * ban/freeze withdraw
+
+________________
+
+
+8) Admin Moderation Tools
+                                                                                             * Ban / Unban
+
+                                                                                             * Status labels: Low/Medium/High/Banned
+
+                                                                                             * Show label inside withdraw review page
+
+________________
+
+
+9) Notifications
+                                                                                                * In-app notifications:
+
+                                                                                                   * pending/approved offers completion
+
+                                                                                                   * withdraw requested/approved/denied
+
+                                                                                                   * risk/hold warnings
+                                                                                                   * Leaderboard winning 
+
+                                                                                                      * Email notifications for critical actions
+
+________________
+
+
+10) Signup Bonus + Referral (If you want)
+                                                                                                         * Signup bonus rules:
+
+                                                                                                            * can be pending for X days
+
+                                                                                                            * only if email verified
+
+                                                                                                            * anti abuse (device/IP limit)
+
+                                                                                                               * Referral tracking:
+
+                                                                                                                  * ref code
+
+                                                                                                                  * reward rules + hold if suspicious
+
+________________
+
+
+P2 (Nice-to-have / growth)
+11) Blog CMS-lite
+                                                                                                                     * Admin CRUD posts
+
+                                                                                                                     * Slug SEO, pagination
+
+                                                                                                                     * Draft + publish schedule
+
+                                                                                                                     * Thumbnail upload
+
+12) Performance & Observability
+                                                                                                                        * DB indexes for ledger/completions/withdrawals
+
+                                                                                                                        * Error monitoring (Sentry etc.)
+
+                                                                                                                        * Backups + basic metrics dashboard
+
+________________
+
+
+UI / Design Requirements (Apply to all)
+                                                                                                                           * Theme: black + gold, modern GPT style
+
+                                                                                                                           * Responsive mobile + desktop
+
+                                                                                                                           * Icons must be licensed (no copyrighted rip)
+
+                                                                                                                           * Offer grid tidy, low padding, hover effects
+
+                                                                                                                           * Remove “GC” label on reward display per your note
+                                                                                                                           * Use 1:1 value, 1 points = $1
+
+________________
+
+
+Deliverables Checklist (Dev must confirm)
+                                                                                                                              1. ✅ Auth + email verify working
+
+                                                                                                                              2. ✅ Offer list + offer detail + click session tracking
+
+                                                                                                                              3. ✅ Postback endpoint verified + idempotent + logs + async job
+
+                                                                                                                              4. ✅ Ledger-based balances (available/pending/locked) + ledger history
+
+                                                                                                                              5. ✅ Withdraw UI + user request flow + admin approval flow
+
+                                                                                                                              6. ✅ Admin route protection + secret protection
+
+                                                                                                                              7. ✅ Basic risk gating + hold capability
+
+________________
+
+
+Notes for Developer
+                                                                                                                                 * This is not “frontend only”. A GPT site needs:
+
+                                                                                                                                    * ledger
+
+                                                                                                                                    * postback processing
+
+                                                                                                                                    * withdraw approval system
+
+                                                                                                                                    * logging & anti-abuse
+
+If any part missing, the platform is not operable for offerwalls.
+
+                                                                                                                                    * Use real crypto time data, validate wallet crypto.
+                                                                                                                                    * 0.5% fees on every withdraw.
+________________
+
+
+Nếu bạn muốn, mình có thể viết thêm “Data models” chuẩn (Mongo collections + indexes) + API route list (endpoint map) để dev implement nhanh và không bị thiếu logic. - ChatGPT 
+————————————————————-
+A) AUTH / TÀI KHOẢN (User)
+                                                                                                                                       * Đăng ký / Đăng nhập / Đăng xuất
+
+                                                                                                                                       * Xác minh email (magic link (resend)
+
+                                                                                                                                       * Quên mật khẩu / Reset mật khẩu
+
+                                                                                                                                       * Bảo mật session bằng httpOnly cookies
+
+                                                                                                                                       * Bảo vệ login bằng Cloudflare (bot protection / WAF)
+
+                                                                                                                                       * Trang Profile (thông tin cơ bản)
+
+                                                                                                                                       * Đổi mật khẩu 
+                                                                                                                                       * 2FA (optional, có thể thêm sau)
+
+________________
+
+
+B) DASHBOARD / SỐ DƯ
+Wallet hiển thị:
+                                                                                                                                          * Available balance (có thể rút)
+
+                                                                                                                                          * Pending / Hold balance (đang chờ)
+
+                                                                                                                                          * Tổng đã kiếm được
+
+Lịch sử giao dịch (ledger):
+                                                                                                                                             * credit / debit / hold / release / reversal
+
+                                                                                                                                             * mỗi record gồm: type, amount, provider, thời gian, status, reference id
+
+                                                                                                                                             * Hiển thị thông báo khi balance thay đổi
+
+                                                                                                                                             * Có phần giải thích vì sao balance, offer, affiliate đang pending
+
+________________
+
+
+C) HỆ THỐNG EARN (OFFERS)
+Hỗ trợ 2 hình thức:
+1️⃣ API Pull (Custom Offer Display)
+                                                                                                                                                * Backend gọi API của provider để lấy danh sách offer
+
+                                                                                                                                                * Render offer theo UI của mình (grid, filter, search, sort)
+
+                                                                                                                                                * Offer detail page:
+
+                                                                                                                                                   * description
+
+                                                                                                                                                   * steps (nếu có)
+
+                                                                                                                                                   * payout
+
+                                                                                                                                                   * nút “Start Offer”
+
+                                                                                                                                                      * Khi user click:
+
+                                                                                                                                                         * tạo click session
+
+                                                                                                                                                         * redirect qua provider với subid=userId
+
+                                                                                                                                                         * lưu log click (userId, provider, offerId, clickId, IP, UA, timestamp)
+
+2️⃣ Iframe Offerwall
+                                                                                                                                                            * Có trang “Offerwall” riêng
+
+                                                                                                                                                            * Embed iframe từ provider
+
+                                                                                                                                                            * User mở và làm offer trực tiếp trong đó
+
+                                                                                                                                                            * Vẫn dùng chung hệ thống postback để credit
+
+________________
+
+
+D) POSTBACK / CALLBACK (BACKEND QUAN TRỌNG)
+Cho mỗi provider (Torox, AdGem, RevU, BitLabs/CPX, Lootably, v.v):
+                                                                                                                                                               * Endpoint nhận postback
+
+                                                                                                                                                               * Verify secret (HMAC / token / signature)
+
+                                                                                                                                                               * Validate amount + offerId + status
+
+                                                                                                                                                               * Chống duplicate (transaction_id unique)
+
+                                                                                                                                                               * Log raw payload
+
+                                                                                                                                                               * Rate limit endpoint
+
+                                                                                                                                                               * Replay protection (nếu có timestamp)
+
+                                                                                                                                                               * Optional IP allowlist
+
+Flow xử lý:
+                                                                                                                                                                  * pending → add pending balance
+
+                                                                                                                                                                  * approved → move pending → available
+
+                                                                                                                                                                  * chargeback/rejected → reverse / clawback
+
+________________
+
+
+E) LEDGER SYSTEM (KHÔNG UPDATE BALANCE TRỰC TIẾP)
+                                                                                                                                                                     * Tất cả thay đổi balance phải qua ledger
+
+                                                                                                                                                                     * Balance tính từ ledger
+
+Hỗ trợ:
+                                                                                                                                                                        * credit_pending
+
+                                                                                                                                                                        * release_to_available
+
+                                                                                                                                                                        * debit_withdraw
+
+                                                                                                                                                                        * reversal
+
+                                                                                                                                                                        * admin_adjust
+
+________________
+
+
+F) WITHDRAW SYSTEM
+                                                                                                                                                                           * Trang withdraw layout hiện đại (đen + vàng)
+
+                                                                                                                                                                           * Phương thức:
+
+                                                                                                                                                                              * Crypto: LTC / SOL / ETH
+
+                                                                                                                                                                              * Giftcards: Roblox / Steam / Valorant / PS / Nike / DoorDash
+
+                                                                                                                                                                              * Cash: PayPal / Visa Virtual / ACH
+
+Flow:
+                                                                                                                                                                                 * Chọn method → nhập info → confirm
+
+                                                                                                                                                                                 * Hiển thị fee + min withdraw (crypto fees 1-5% vi dụ: $10 sau phí-> $9.9, gift card 1-5% ví dụ: $10 sau phí -> $10.1)
+
+                                                                                                                                                                                 * Block nếu available < amount
+
+                                                                                                                                                                                 * Popup: “Balance đang pending / hold”
+
+                                                                                                                                                                                 * Status:
+
+                                                                                                                                                                                    * pending
+
+                                                                                                                                                                                    * approved
+
+                                                                                                                                                                                    * denied
+
+                                                                                                                                                                                    * paid
+
+Anti abuse:
+                                                                                                                                                                                       * Cooldown giữa request
+
+                                                                                                                                                                                       * Daily limit
+
+                                                                                                                                                                                       * Require email verified
+
+                                                                                                                                                                                       * Có thể yêu cầu KYC khi vượt threshold
+
+                                                                                                                                                                                       * Flag, theo dõi phương tiện rút tiền trùng và chặn withdraw. Cho đến khi đc giải quyết bởi admin.
+________________
+
+
+G) REFERRAL
+                                                                                                                                                                                          * Referral code system
+
+                                                                                                                                                                                          * Tracking signup
+
+                                                                                                                                                                                          * Referral reward (signup bonus hoặc 5% earnings)
+
+                                                                                                                                                                                          * Chống self-ref
+
+                                                                                                                                                                                          * Check IP/device trùng
+                                                                                                                                                                                          * Nếu user sign up không dùng ref thì set userref bằng không
+________________
+
+
+H) BONUS
+                                                                                                                                                                                             * Signup bonus
+
+                                                                                                                                                                                             * Level reward
+
+                                                                                                                                                                                             * Bundle rewards
+
+                                                                                                                                                                                             * ________________
+
+
+I) RISK / FRAUD SYSTEM
+                                                                                                                                                                                                * Risk score 0–100%
+                                                                                                                                                                                                * 0-5% bình thường, 6-10% bất ổn, 11% nguy hiểm 
+
+                                                                                                                                                                                                * Dựa trên:
+
+                                                                                                                                                                                                   * VPN/proxy
+
+                                                                                                                                                                                                   * IP thay đổi nhiều
+
+                                                                                                                                                                                                   * device mismatch
+
+                                                                                                                                                                                                   * tốc độ hoàn thành bất thường
+
+                                                                                                                                                                                                   * nhiều account cùng IP
+
+                                                                                                                                                                                                   * chargeback history
+
+                                                                                                                                                                                                   * withdraw bất thường
+
+Hành động:
+                                                                                                                                                                                                      * auto flag
+
+                                                                                                                                                                                                      * auto hold earnings
+
+                                                                                                                                                                                                      * block withdraw
+
+                                                                                                                                                                                                      * ban/unban
+
+________________
+
+
+J) ADMIN PANEL
+                                                                                                                                                                                                         * Admin login riêng
+
+                                                                                                                                                                                                         * Protect toàn bộ admin route
+
+Admin có thể:
+                                                                                                                                                                                                            * Xem stats tổng quan
+
+                                                                                                                                                                                                            * Search user
+
+                                                                                                                                                                                                            * Xem balance + ledger
+
+                                                                                                                                                                                                            * Ban/unban
+
+                                                                                                                                                                                                            * Approve/deny withdraw
+
+                                                                                                                                                                                                            * Manual credit / hold / reverse
+
+                                                                                                                                                                                                            * Xem postback logs
+
+                                                                                                                                                                                                            * Xem admin action logs
+
+                                                                                                                                                                                                            * Config hold policy
+
+________________
+
+
+K) LEGAL + SUPPORT
+                                                                                                                                                                                                               * Terms of Service
+
+                                                                                                                                                                                                               * Privacy Policy
+
+                                                                                                                                                                                                               * FAQ
+
+                                                                                                                                                                                                               * Support form / live chat (crisp)
+
+                                                                                                                                                                                                               * Blog CMS basic
+
+________________
+
+
+L) SECURITY (BẮT BUỘC)
+                                                                                                                                                                                                                  * Rate limit tất cả API (đặc biệt postback + withdraw)
+
+                                                                                                                                                                                                                  * Validate input
+
+                                                                                                                                                                                                                  * CSRF protection
+
+                                                                                                                                                                                                                  * XSS protection
+
+                                                                                                                                                                                                                  * Secure cookies + HTTPS only
+
+                                                                                                                                                                                                                  * Không expose API keys frontend
+
+                                                                                                                                                                                                                  * Cloudflare WAF / bot protection
+
+                                                                                                                                                                                                                  * Audit logging
+
+                                                                                                                                                                                                                  * Backup DB
+
+________________
+
+
+M) PERFORMANCE
+                                                                                                                                                                                                                     * Cache offer feed
+
+                                                                                                                                                                                                                     * Pagination
+
+                                                                                                                                                                                                                     * DB index:
+
+                                                                                                                                                                                                                        * users
+
+                                                                                                                                                                                                                        * withdrawals
+
+                                                                                                                                                                                                                        * ledger
+
+                                                                                                                                                                                                                        * offer_completions
+
+                                                                                                                                                                                                                        * transaction_id unique
+
+                                                                                                                                                                                                                           * Queue cho postback processing
+
+                                                                                                                                                                                                                           * Cron job release hold
+1️⃣ OFFER SYSTEM (CHI TIẾT BACKEND FLOW)
+1.1 Nguồn Offer
+Hệ thống hỗ trợ 2 hình thức:
+A. API Pull (Custom Offer List)
+                                                                                                                                                                                                                              * Backend gọi API provider để lấy:
+
+                                                                                                                                                                                                                                 * offer_id
+
+                                                                                                                                                                                                                                 * title
+
+                                                                                                                                                                                                                                 * description
+
+                                                                                                                                                                                                                                 * image
+
+                                                                                                                                                                                                                                 * payout
+
+                                                                                                                                                                                                                                 * country
+
+                                                                                                                                                                                                                                 * category
+
+                                                                                                                                                                                                                                 * platform
+
+                                                                                                                                                                                                                                 * tracking_url
+
+                                                                                                                                                                                                                                    * Backend normalize về 1 format chung.
+
+                                                                                                                                                                                                                                    * Cache 5–15 phút để tránh spam API.
+
+B. Iframe Offerwall
+                                                                                                                                                                                                                                       * Trang riêng embed iframe của provider.
+
+                                                                                                                                                                                                                                       * Dùng chung hệ thống postback để credit.
+
+________________
+
+
+2️⃣ CLICK TRACKING (BẮT BUỘC)
+Khi user click “Start Offer”:
+Backend phải:
+                                                                                                                                                                                                                                          * Tạo record offer_click_session
+
+                                                                                                                                                                                                                                          * Lưu:
+
+                                                                                                                                                                                                                                             * userId
+
+                                                                                                                                                                                                                                             * provider
+
+                                                                                                                                                                                                                                             * offerId
+
+                                                                                                                                                                                                                                             * clickId (random unique)
+
+                                                                                                                                                                                                                                             * IP
+
+                                                                                                                                                                                                                                             * userAgent
+
+                                                                                                                                                                                                                                             * createdAt
+
+                                                                                                                                                                                                                                                * Redirect user qua provider link có:
+
+                                                                                                                                                                                                                                                   * subid = userId
+
+                                                                                                                                                                                                                                                   * clickId = clickId
+
+Mục đích:
+                                                                                                                                                                                                                                                      * Sau này postback về phải match với click session
+
+                                                                                                                                                                                                                                                      * Nếu không match → đánh dấu suspicious
+
+________________
+
+
+3️⃣ POSTBACK / CALLBACK SYSTEM (CỰC KỲ QUAN TRỌNG)
+3.1 Endpoint ví dụ
+/api/postback/{provider}
+3.2 Bắt buộc phải có
+A. Verify Secret
+                                                                                                                                                                                                                                                         * HMAC hoặc token so sánh với secret lưu trong server
+
+                                                                                                                                                                                                                                                         * Nếu sai → reject
+
+B. Validate dữ liệu
+                                                                                                                                                                                                                                                            * userId phải tồn tại
+
+                                                                                                                                                                                                                                                            * offerId tồn tại
+
+                                                                                                                                                                                                                                                            * amount > 0
+
+                                                                                                                                                                                                                                                            * status hợp lệ
+
+C. Deduplicate
+                                                                                                                                                                                                                                                               * Mỗi provider gửi transaction_id
+
+                                                                                                                                                                                                                                                               * Tạo unique index: (provider + transaction_id)
+
+                                                                                                                                                                                                                                                               * Nếu tồn tại rồi → ignore
+
+D. Log raw payload
+                                                                                                                                                                                                                                                                  * Lưu toàn bộ body + headers vào postback_logs
+
+________________
+
+
+4️⃣ OFFER HOLD POLICY (CỤ THỂ)
+Hệ thống phải hỗ trợ HOLD theo rule:
+4.1 Hold mặc định
+Ví dụ:
+                                                                                                                                                                                                                                                                     * Game offers → hold 7 ngày
+
+                                                                                                                                                                                                                                                                     * Crypto offers → hold 14 ngày
+
+                                                                                                                                                                                                                                                                     * Casino offers → hold 30 ngày
+
+                                                                                                                                                                                                                                                                     * Survey → hold 0–3 ngày
+0-10$ hold 1 ngày, 11-25$ hold 1 tuần, 26-50 2 tuần, 51-100 4 tuần, $100-100,000 6 tuần
+4.2 Hold theo risk level
+Nếu user risk cao:
+                                                                                                                                                                                                                                                                        * Tăng hold thêm X ngày (2 tuần)
+
+                                                                                                                                                                                                                                                                        * Hoặc chuyển sang manual review
+
+4.3 Flow xử lý
+Nếu status = pending:
+→ cộng vào pending_balance
+Nếu status = approved:
+→ tạo ledger:
+                                                                                                                                                                                                                                                                           * credit_pending
+
+→ set unlockAt = now + holdDays
+
+Cron job mỗi giờ:
+                                                                                                                                                                                                                                                                              * Check completion đã hết hold
+
+                                                                                                                                                                                                                                                                              * Chuyển:
+
+pending_balance → available_balance
+
+                                                                                                                                                                                                                                                                              * Tạo ledger record: release_to_available
+
+Nếu status = chargeback:
+→ tạo reversal ledger
+→ trừ available hoặc pending tùy trạng thái
+________________
+
+
+5️⃣ LEDGER SYSTEM (KHÔNG UPDATE BALANCE TRỰC TIẾP)
+Balance không lưu cố định.
+Balance = SUM(ledger)
+Ledger record gồm:
+                                                                                                                                                                                                                                                                                 * userId
+
+                                                                                                                                                                                                                                                                                 * type
+
+                                                                                                                                                                                                                                                                                 * direction (credit/debit)
+
+                                                                                                                                                                                                                                                                                 * amount
+
+                                                                                                                                                                                                                                                                                 * status
+
+                                                                                                                                                                                                                                                                                 * referenceId
+
+                                                                                                                                                                                                                                                                                 * provider
+
+                                                                                                                                                                                                                                                                                 * createdAt
+
+Loại ledger:
+                                                                                                                                                                                                                                                                                    * offer_pending
+
+                                                                                                                                                                                                                                                                                    * offer_release
+
+                                                                                                                                                                                                                                                                                    * offer_reversal
+
+                                                                                                                                                                                                                                                                                    * withdraw_request
+
+                                                                                                                                                                                                                                                                                    * withdraw_approve
+
+                                                                                                                                                                                                                                                                                    * withdraw_deny
+
+                                                                                                                                                                                                                                                                                    * admin_adjust
+
+                                                                                                                                                                                                                                                                                    * signup_bonus
+
+                                                                                                                                                                                                                                                                                    * referral_bonus
+
+________________
+
+
+6️⃣ WITHDRAW SYSTEM (LOGIC CỤ THỂ)
+6.1 Điều kiện rút
+User chỉ được rút nếu:
+                                                                                                                                                                                                                                                                                       * emailVerified = true
+
+                                                                                                                                                                                                                                                                                       * available_balance >= amount
+
+                                                                                                                                                                                                                                                                                       * không bị banned
+
+                                                                                                                                                                                                                                                                                       * riskScore < threshold (hoặc manual review)
+
+6.2 Flow
+User request:
+                                                                                                                                                                                                                                                                                          * tạo withdraw record status = pending
+
+                                                                                                                                                                                                                                                                                          * trừ available_balance bằng ledger debit_withdraw
+
+Admin approve:
+                                                                                                                                                                                                                                                                                             * update status = approved
+
+                                                                                                                                                                                                                                                                                             * lưu payout reference (tx hash / PayPal ID)
+
+                                                                                                                                                                                                                                                                                             * status = paid
+
+Admin deny:
+                                                                                                                                                                                                                                                                                                * update status = denied
+
+                                                                                                                                                                                                                                                                                                * hoàn tiền lại available_balance
+
+6.3 Anti abuse
+                                                                                                                                                                                                                                                                                                   * Cooldown giữa các lần withdraw (ví dụ 24h)
+
+                                                                                                                                                                                                                                                                                                   * Giới hạn rút mỗi ngày (5)
+
+                                                                                                                                                                                                                                                                                                   * Nếu withdraw đầu tiên → auto hold 24–72h
+
+                                                                                                                                                                                                                                                                                                   * Nếu risk cao → manual review bắt buộc
+
+________________
+
+
+7️⃣ RISK SYSTEM (LOGIC CỤ THỂ)
+Risk score 0–100 dựa trên:
+                                                                                                                                                                                                                                                                                                      * VPN detected (+20)
+
+                                                                                                                                                                                                                                                                                                      * IP thay đổi > 3 lần/ngày (+15)
+
+                                                                                                                                                                                                                                                                                                      * Chargeback history (+30)
+
+                                                                                                                                                                                                                                                                                                      * Hoàn thành quá nhanh (+10)
+
+                                                                                                                                                                                                                                                                                                      * Nhiều account chung IP (+25)
+
+Nếu risk > 60:
+                                                                                                                                                                                                                                                                                                         * auto hold earnings
+
+                                                                                                                                                                                                                                                                                                         * block withdraw
+
+Nếu risk > 80:
+                                                                                                                                                                                                                                                                                                            * require KYC hoặc ban
+
+________________
+
+
+8️⃣ ADMIN PANEL (CỤ THỂ)
+Admin có thể:
+                                                                                                                                                                                                                                                                                                               * Xem danh sách user + risk score
+
+                                                                                                                                                                                                                                                                                                               * Xem ledger chi tiết
+
+                                                                                                                                                                                                                                                                                                               * Xem click sessions
+
+                                                                                                                                                                                                                                                                                                               * Xem postback logs
+
+                                                                                                                                                                                                                                                                                                               * Approve/deny withdraw
+
+                                                                                                                                                                                                                                                                                                               * Manual credit/debit
+
+                                                                                                                                                                                                                                                                                                               * Set hold days theo provider
+
+                                                                                                                                                                                                                                                                                                               * Ban/unban
+
+Tất cả hành động admin phải lưu vào admin_action_logs
+________________
+
+
+9️⃣ SECURITY
+                                                                                                                                                                                                                                                                                                                  * Rate limit:
+
+                                                                                                                                                                                                                                                                                                                     * login
+
+                                                                                                                                                                                                                                                                                                                     * withdraw
+
+                                                                                                                                                                                                                                                                                                                     * postback
+
+                                                                                                                                                                                                                                                                                                                        * Validate input bằng schema
+
+                                                                                                                                                                                                                                                                                                                        * Secure cookies
+
+                                                                                                                                                                                                                                                                                                                        * Không expose secret
+
+                                                                                                                                                                                                                                                                                                                        * Cloudflare WAF bật bot protection
+
+                                                                                                                                                                                                                                                                                                                        * Unique index DB để chống duplicate
+
+                                                                                                                                                                                                                                                                                                                        * Queue xử lý postback async
+
+________________
+
+
+🔟 DATABASE COLLECTIONS CẦN CÓ
+                                                                                                                                                                                                                                                                                                                           * users
+
+                                                                                                                                                                                                                                                                                                                           * ledger
+
+                                                                                                                                                                                                                                                                                                                           * offer_click_sessions
+
+                                                                                                                                                                                                                                                                                                                           * offer_completions
+
+                                                                                                                                                                                                                                                                                                                           * postback_logs
+
+                                                                                                                                                                                                                                                                                                                           * withdrawals
+
+                                                                                                                                                                                                                                                                                                                           * admin_action_logs
+
+                                                                                                                                                                                                                                                                                                                           * risk_flags
+
+________________
+
+
+🎯 QUAN TRỌNG NHẤT
+Nếu thiếu:
+                                                                                                                                                                                                                                                                                                                              * click tracking
+
+                                                                                                                                                                                                                                                                                                                              * postback verify + dedupe
+
+                                                                                                                                                                                                                                                                                                                              * ledger system
+
+                                                                                                                                                                                                                                                                                                                              * hold release cron
+
+                                                                                                                                                                                                                                                                                                                              * withdraw approval flow
+
+→ Website không thể vận hành GPT đúng chuẩn.
+________________
+
+
+Nếu bạn muốn mình viết thêm phần:
+                                                                                                                                                                                                                                                                                                                                 * 📊 Schema Mongo cụ thể từng collection
+
+                                                                                                                                                                                                                                                                                                                                 * 🔄 Flow diagram text từ click → postback → ledger → withdraw
+
+                                                                                                                                                                                                                                                                                                                                 * 🧠 Risk scoring algorithm example code logic
+
+
+
+🔔 NOTIFICATIONS (BELL) – USER + ADMIN
+1) Mục tiêu
+                                                                                                                                                                                                                                                                                                                                    * Hiển thị icon chuông (bell) trong header.
+
+                                                                                                                                                                                                                                                                                                                                    * Có danh sách thông báo (dropdown + trang /notifications).
+
+                                                                                                                                                                                                                                                                                                                                    * Có badge số lượng chưa đọc.
+
+                                                                                                                                                                                                                                                                                                                                    * Thông báo tạo tự động từ các event quan trọng (offer pending/approved/chargeback, withdraw, bonus, risk).
+
+________________
+
+
+2) Backend cần có (bắt buộc)
+2.1 Collection: 
+notifications
+Mỗi record gồm:
+                                                                                                                                                                                                                                                                                                                                       * _id
+
+                                                                                                                                                                                                                                                                                                                                       * userId (nullable nếu là system/admin broadcast)
+
+                                                                                                                                                                                                                                                                                                                                       * type (string enum)
+
+                                                                                                                                                                                                                                                                                                                                       * title (ngắn)
+
+                                                                                                                                                                                                                                                                                                                                       * message (chi tiết)
+
+                                                                                                                                                                                                                                                                                                                                       * meta (object: provider, offerId, amount, withdrawalId, txid…)
+
+                                                                                                                                                                                                                                                                                                                                       * link (ví dụ /profile/offers hoặc /cashout/history)
+
+                                                                                                                                                                                                                                                                                                                                       * severity (info | success | warning | danger)
+
+                                                                                                                                                                                                                                                                                                                                       * readAt (null nếu chưa đọc)
+
+                                                                                                                                                                                                                                                                                                                                       * createdAt
+
+DB index cần có
+                                                                                                                                                                                                                                                                                                                                          * userId + createdAt
+
+                                                                                                                                                                                                                                                                                                                                          * userId + readAt
+
+________________
+
+
+3) Những sự kiện phải tạo thông báo (USER)
+A) Earn / Offer events
+                                                                                                                                                                                                                                                                                                                                             1. Offer clicked (optional)
+
+                                                                                                                                                                                                                                                                                                                                                * “Bạn đã bắt đầu offer X”
+
+                                                                                                                                                                                                                                                                                                                                                   2. Postback pending
+
+                                                                                                                                                                                                                                                                                                                                                      * “Offer X đã ghi nhận (Pending). Sẽ được mở khóa sau N ngày.”
+
+                                                                                                                                                                                                                                                                                                                                                      * kèm link “Tại sao pending?”
+
+                                                                                                                                                                                                                                                                                                                                                         3. Approved + vào hold
+
+                                                                                                                                                                                                                                                                                                                                                            * “Offer X được duyệt. Đang giữ trong Hold đến ngày DD/MM.”
+
+                                                                                                                                                                                                                                                                                                                                                               4. Release sang available
+
+                                                                                                                                                                                                                                                                                                                                                                  * “Offer X đã mở khóa. Bạn có thể rút ngay.”
+
+                                                                                                                                                                                                                                                                                                                                                                     5. Chargeback / Reversal
+
+                                                                                                                                                                                                                                                                                                                                                                        * “Offer X bị chargeback. Số dư đã bị điều chỉnh.”
+
+B) Withdraw events
+                                                                                                                                                                                                                                                                                                                                                                           1. Withdraw submitted
+
+                                                                                                                                                                                                                                                                                                                                                                              * “Yêu cầu rút #123 đã gửi (Pending review).”
+
+                                                                                                                                                                                                                                                                                                                                                                                 2. Withdraw approved
+
+                                                                                                                                                                                                                                                                                                                                                                                    * “Rút tiền #123 được duyệt.”
+
+                                                                                                                                                                                                                                                                                                                                                                                       3. Withdraw paid
+
+                                                                                                                                                                                                                                                                                                                                                                                          * “Đã thanh toán #123. Ref/Tx: …”
+
+                                                                                                                                                                                                                                                                                                                                                                                             4. Withdraw denied
+
+                                                                                                                                                                                                                                                                                                                                                                                                * “Rút tiền #123 bị từ chối: (reason)”
+
+                                                                                                                                                                                                                                                                                                                                                                                                * và hệ thống hoàn tiền (ledger reversal)
+
+C) Account / Security
+                                                                                                                                                                                                                                                                                                                                                                                                   * Email verified
+
+                                                                                                                                                                                                                                                                                                                                                                                                   * Password changed
+
+                                                                                                                                                                                                                                                                                                                                                                                                   * Login from new device/IP (optional, nhưng tốt)
+
+                                                                                                                                                                                                                                                                                                                                                                                                   * Risk flagged / Withdraw blocked do risk
+
+                                                                                                                                                                                                                                                                                                                                                                                                   * KYC required (nếu sau này có)
+
+D) Bonuses / Referral
+                                                                                                                                                                                                                                                                                                                                                                                                      * Signup bonus granted
+
+                                                                                                                                                                                                                                                                                                                                                                                                      * Referral reward granted
+
+                                                                                                                                                                                                                                                                                                                                                                                                      * Promo code redeemed
+
+________________
+
+
+4) Admin notifications (cần có cái tối thiểu)
+A) Admin bell (admin dashboard)
+Event:
+                                                                                                                                                                                                                                                                                                                                                                                                         * Có withdraw mới chờ duyệt
+
+                                                                                                                                                                                                                                                                                                                                                                                                         * Có user bị auto-flag risk cao
+
+                                                                                                                                                                                                                                                                                                                                                                                                         * Postback error (signature fail / invalid status / duplicate spam)
+
+                                                                                                                                                                                                                                                                                                                                                                                                         * Spike traffic / rate limit triggered (optional)
+
+________________
+
+
+5) API endpoints cần có
+User APIs
+                                                                                                                                                                                                                                                                                                                                                                                                            * GET /api/notifications?cursor=... (pagination)
+
+                                                                                                                                                                                                                                                                                                                                                                                                            * POST /api/notifications/mark-read (mark 1 hoặc list)
+
+                                                                                                                                                                                                                                                                                                                                                                                                            * POST /api/notifications/mark-all-read
+
+                                                                                                                                                                                                                                                                                                                                                                                                            * GET /api/notifications/unread-count
+
+Admin APIs (nếu làm bell cho admin)
+                                                                                                                                                                                                                                                                                                                                                                                                               * GET /api/admin/notifications
+
+                                                                                                                                                                                                                                                                                                                                                                                                               * POST /api/admin/notifications/mark-read
+
+________________
+
+
+6) Realtime hay Poll?
+Option 1 (đơn giản, đủ dùng): Poll 10–30s
+                                                                                                                                                                                                                                                                                                                                                                                                                  * Frontend setInterval gọi unread-count + fetch list khi mở dropdown.
+
+Option 2 (xịn hơn): SSE/WebSocket
+                                                                                                                                                                                                                                                                                                                                                                                                                     * Khi postback/withdraw update → push notify realtime.
+
+Gợi ý: làm Option 1 trước cho nhanh, stable.
+________________
+
+
+7) UI behavior (cụ thể)
+                                                                                                                                                                                                                                                                                                                                                                                                                        * Bell icon ở header
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        * Badge = số thông báo chưa đọc
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        * Dropdown list 8–15 items gần nhất
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        * Nút “Mark all as read”
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        * Mỗi item có:
+
+                                                                                                                                                                                                                                                                                                                                                                                                                           * title
+
+                                                                                                                                                                                                                                                                                                                                                                                                                           * time ago
+
+                                                                                                                                                                                                                                                                                                                                                                                                                           * icon theo severity
+
+                                                                                                                                                                                                                                                                                                                                                                                                                           * click → chuyển route theo link
+
+                                                                                                                                                                                                                                                                                                                                                                                                                              * Nếu empty → “Không có thông báo”
+
+
+
+Hết yêu cầu hiện tại — sẽ bổ sung thêm sau.

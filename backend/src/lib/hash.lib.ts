@@ -11,3 +11,9 @@ export const comparePassword = async (
 ): Promise<boolean> => {
   return await bcrypt.compare(password, hash);
 };
+
+export const hashToken = (token: string): string => {
+  const hasher = new Bun.CryptoHasher("sha256");
+  hasher.update(token);
+  return hasher.digest("hex");
+};

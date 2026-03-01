@@ -6,9 +6,11 @@ import cors from "@elysiajs/cors";
 import { corsConfig } from "./configs/cors.config";
 import Elysia from "elysia";
 import { protectedAuth, publicAuth } from "./routes/auth.route";
+import { geoFromIp } from "./utils/lookup.util";
 
 async function bootstrap() {
   const port = Bun.env.PORT || 3000;
+
   await connectWithRetry();
 
   const app = new Elysia()

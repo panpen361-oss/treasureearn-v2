@@ -30,7 +30,6 @@ export const login = async ({
     return fail("400", "Email and password are required");
   }
 
-  // Get ip from server context instead of body
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     server?.requestIP(request)?.address ??
@@ -63,17 +62,18 @@ export const login = async ({
     .limit(1);
 
   if (loginSession) {
-    // Existing session found — check if the login location matches
     if (
       ipPosition?.city !== loginSession.city ||
       ipPosition?.country !== loginSession.country
     ) {
       // TODO: Send confirmation email to user for new location verification
       set.status = 403;
-      return fail("403", "New login location detected. Please check your email to confirm.");
+      return fail(
+        "403",
+        "New login location detected. Please check your email to confirm.",
+      );
     }
   } else {
-    // First login — create a new login session
     await db.insert(loginSessions).values({
       userId: user.id,
       ip,
@@ -109,7 +109,6 @@ export const login = async ({
     expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN * 1000),
   });
 
-  // Exclude hashedPassword from the response
   const { hashedPassword: _, ...safeUser } = user;
 
   return ok({

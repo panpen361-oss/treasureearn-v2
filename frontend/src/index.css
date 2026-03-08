@@ -1,68 +1,153 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
   }
-  a:hover {
-    color: #747bff;
+
+  100% {
+    transform: translateX(-50%);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-container:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+@theme {
+  /* ===============================================
+     PALETTE: Black + Gold + White
+     =============================================== */
+
+  /* Backgrounds — pure black to very dark */
+  --color-dark-background: #0a0a0a;
+  --color-dark-surface: #111111;
+  --color-dark-surface-highlight: #1a1a1a;
+
+  /* Gold — the primary accent */
+  --color-gold-50: #fffdf0;
+  --color-gold-100: #fef9c3;
+  --color-gold-200: #fef08a;
+  --color-gold-300: #fde047;
+  --color-gold-400: #facc15;
+  /* main gold */
+  --color-gold-500: #eab308;
+  --color-gold-600: #ca8a04;
+  --color-gold-700: #a16207;
+
+  /* Aliases so existing code still works */
+  --color-primary-400: var(--color-gold-400);
+  --color-primary-500: var(--color-gold-500);
+  --color-primary-600: var(--color-gold-600);
+
+  --font-family-sans: 'Inter', sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark-background);
+    color: #f5f5f5;
+    font-family: var(--font-family-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@layer components {
+
+  /* ---- Glass card ---- */
+  .glass {
+    background-color: rgba(17, 17, 17, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  }
+
+  .glass-card {
+    background-color: rgba(17, 17, 17, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.25s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(234, 179, 8, 0.25);
+    box-shadow: 0 8px 40px rgba(234, 179, 8, 0.08);
+  }
+
+  /* ---- Gold primary button ---- */
+  .btn-primary {
+    display: inline-block;
+    padding: 0.55rem 1.25rem;
+    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+    color: #0a0a0a;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    transition: filter 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ---- Input field ---- */
+  .input-field {
+    width: 100%;
+    background-color: var(--color-dark-surface-highlight);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #f5f5f5;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .input-field::placeholder {
+    color: rgba(200, 200, 200, 0.35);
+  }
+
+  .input-field:focus {
+    border-color: rgba(234, 179, 8, 0.5);
+    box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.12);
+  }
+
+  /* ---- Gold text gradient ---- */
+  .gold-text {
+    background: linear-gradient(135deg, #facc15 0%, #eab308 60%, #ca8a04 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

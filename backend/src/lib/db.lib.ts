@@ -7,20 +7,20 @@ if (!Bun.env.DATABASE_URL) {
   process.exit(1);
 }
 
-export async function connectWithRetry(
+const client = new Client({
+  connectionString: Bun.env.DATABASE_URL,
+  ssl: Bun.env.NODE_ENV === "production",
+});
+
+export async function connectDB(
   retries = 5,
   delayMs = 2000,
-): Promise<Client> {
-  const client = new Client({
-    connectionString: Bun.env.DATABASE_URL,
-    ssl: Bun.env.NODE_ENV === "production",
-  });
-
+): Promise<void> {
   for (let i = 1; i <= retries; i++) {
     try {
       await client.connect();
-      logger_success(`DB connected (${i}/${retries})`);
-      return client;
+      logger_success(`DB connected (attempt ${i}/${retries})`);
+      return;
     } catch (err: unknown) {
       logger_error(`DB connection failed (${i}/${retries})`);
 
@@ -36,8 +36,8 @@ export async function connectWithRetry(
       await new Promise((r) => setTimeout(r, delayMs));
     }
   }
-  throw new Error("Unreachable");
 }
 
-export const client = await connectWithRetry();
-export const db = drizzle(client);
+import * as schema from "../schema";
+
+export const db = drizzle(client, { schema });

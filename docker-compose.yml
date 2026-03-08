@@ -1,25 +1,53 @@
 services:
-  treasureearn-postgres:
+  db:
     image: postgres:15-alpine
-    container_name: treasureearn-postgres
+    container_name: treasureearn-db
     restart: unless-stopped
-
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: TreasureEarn
-
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-TreasureEarn}
+      POSTGRES_DB: ${POSTGRES_DB:-TreasureEarn}
     ports:
       - "5432:5432"
-
     volumes:
       - pgdata:/var/lib/postgresql/data
-
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: treasureearn-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-TreasureEarn}@db:5432/${POSTGRES_DB:-TreasureEarn}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: ${PORT:-3001}
+      APP_URL: ${APP_URL}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL}
+    ports:
+      - "${PORT:-3001}:3001"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: treasureearn-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
 
 volumes:
   pgdata:

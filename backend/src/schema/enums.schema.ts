@@ -64,4 +64,5 @@ export const tokenTypeEnum = pgEnum("token_type", [
   "reset-password",
   "forgot-password",
   "withdrawal",
+  "verification-new-ip",
 ]);

@@ -30,7 +30,7 @@ DO $$ BEGIN
         CREATE TYPE "public"."withdraw_status" AS ENUM('pending', 'approved', 'paid', 'denied_refunded');
     END IF;
 END $$;--> statement-breakpoint
-CREATE TABLE "admin_action_logs" (
+CREATE TABLE IF NOT EXISTS "admin_action_logs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"admin_id" uuid NOT NULL,
 	"target_user_id" uuid,
@@ -41,7 +41,7 @@ CREATE TABLE "admin_action_logs" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "blacklist_token" (
+CREATE TABLE IF NOT EXISTS "blacklist_token" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid,
 	"hash_token" varchar NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE "blacklist_token" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "users" (
+CREATE TABLE IF NOT EXISTS "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"username" varchar(100) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_referral_code_unique" UNIQUE("referral_code")
 );
 --> statement-breakpoint
-CREATE TABLE "ledger" (
+CREATE TABLE IF NOT EXISTS "ledger" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"type" "ledger_type" NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE "ledger" (
 	CONSTRAINT "ledger_idempotency_key_unique" UNIQUE("idempotency_key")
 );
 --> statement-breakpoint
-CREATE TABLE "offer_click_sessions" (
+CREATE TABLE IF NOT EXISTS "offer_click_sessions" (
 	"click_id" varchar(255) PRIMARY KEY NOT NULL,
 	"user_id" uuid NOT NULL,
 	"provider" varchar(100) NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE "offer_click_sessions" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "offer_completions" (
+CREATE TABLE IF NOT EXISTS "offer_completions" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"click_id" varchar,
@@ -117,7 +117,7 @@ CREATE TABLE "offer_completions" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "postback_logs" (
+CREATE TABLE IF NOT EXISTS "postback_logs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"provider" varchar(100) NOT NULL,
 	"transaction_id" varchar(255) NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE "postback_logs" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "withdrawals" (
+CREATE TABLE IF NOT EXISTS "withdrawals" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"amount" numeric(16, 4) NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE "withdrawals" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "notifications" (
+CREATE TABLE IF NOT EXISTS "notifications" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid,
 	"type" "notify_type" NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE "notifications" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "tokens" (
+CREATE TABLE IF NOT EXISTS "tokens" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"hash_token" varchar NOT NULL,
@@ -169,7 +169,7 @@ CREATE TABLE "tokens" (
 	CONSTRAINT "tokens_hash_token_unique" UNIQUE("hash_token")
 );
 --> statement-breakpoint
-CREATE TABLE "login_session" (
+CREATE TABLE IF NOT EXISTS "login_session" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"ip" varchar NOT NULL,
@@ -179,25 +179,77 @@ CREATE TABLE "login_session" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "admin_action_logs" ADD CONSTRAINT "admin_action_logs_admin_id_users_id_fk" FOREIGN KEY ("admin_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "admin_action_logs" ADD CONSTRAINT "admin_action_logs_target_user_id_users_id_fk" FOREIGN KEY ("target_user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "blacklist_token" ADD CONSTRAINT "blacklist_token_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "users" ADD CONSTRAINT "users_referred_by_users_id_fk" FOREIGN KEY ("referred_by") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "ledger" ADD CONSTRAINT "ledger_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "offer_click_sessions" ADD CONSTRAINT "offer_click_sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "offer_completions" ADD CONSTRAINT "offer_completions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "offer_completions" ADD CONSTRAINT "offer_completions_click_id_offer_click_sessions_click_id_fk" FOREIGN KEY ("click_id") REFERENCES "public"."offer_click_sessions"("click_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "withdrawals" ADD CONSTRAINT "withdrawals_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "withdrawals" ADD CONSTRAINT "withdrawals_admin_id_users_id_fk" FOREIGN KEY ("admin_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "tokens" ADD CONSTRAINT "tokens_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "login_session" ADD CONSTRAINT "login_session_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "ledger_user_id_idx" ON "ledger" USING btree ("user_id","created_at");--> statement-breakpoint
-CREATE INDEX "click_session_user_id_idx" ON "offer_click_sessions" USING btree ("user_id","created_at");--> statement-breakpoint
-CREATE UNIQUE INDEX "completion_provider_transaction_idx" ON "offer_completions" USING btree ("provider","transaction_id");--> statement-breakpoint
-CREATE INDEX "completion_status_unlock_idx" ON "offer_completions" USING btree ("status","unlock_at");--> statement-breakpoint
-CREATE UNIQUE INDEX "postback_provider_transaction_idx" ON "postback_logs" USING btree ("provider","transaction_id");--> statement-breakpoint
-CREATE INDEX "withdrawal_status_created_idx" ON "withdrawals" USING btree ("status","created_at");--> statement-breakpoint
-CREATE INDEX "withdrawal_user_id_created_idx" ON "withdrawals" USING btree ("user_id","created_at");--> statement-breakpoint
-CREATE INDEX "notification_user_created_idx" ON "notifications" USING btree ("user_id","created_at");--> statement-breakpoint
-CREATE INDEX "notification_user_read_idx" ON "notifications" USING btree ("user_id","read_at");
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'admin_action_logs_admin_id_users_id_fk') THEN
+        ALTER TABLE "admin_action_logs" ADD CONSTRAINT "admin_action_logs_admin_id_users_id_fk" FOREIGN KEY ("admin_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'admin_action_logs_target_user_id_users_id_fk') THEN
+        ALTER TABLE "admin_action_logs" ADD CONSTRAINT "admin_action_logs_target_user_id_users_id_fk" FOREIGN KEY ("target_user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'blacklist_token_user_id_users_id_fk') THEN
+        ALTER TABLE "blacklist_token" ADD CONSTRAINT "blacklist_token_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'users_referred_by_users_id_fk') THEN
+        ALTER TABLE "users" ADD CONSTRAINT "users_referred_by_users_id_fk" FOREIGN KEY ("referred_by") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'ledger_user_id_users_id_fk') THEN
+        ALTER TABLE "ledger" ADD CONSTRAINT "ledger_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'offer_click_sessions_user_id_users_id_fk') THEN
+        ALTER TABLE "offer_click_sessions" ADD CONSTRAINT "offer_click_sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'offer_completions_user_id_users_id_fk') THEN
+        ALTER TABLE "offer_completions" ADD CONSTRAINT "offer_completions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'offer_completions_click_id_offer_click_sessions_click_id_fk') THEN
+        ALTER TABLE "offer_completions" ADD CONSTRAINT "offer_completions_click_id_offer_click_sessions_click_id_fk" FOREIGN KEY ("click_id") REFERENCES "public"."offer_click_sessions"("click_id") ON DELETE no action ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'withdrawals_user_id_users_id_fk') THEN
+        ALTER TABLE "withdrawals" ADD CONSTRAINT "withdrawals_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'withdrawals_admin_id_users_id_fk') THEN
+        ALTER TABLE "withdrawals" ADD CONSTRAINT "withdrawals_admin_id_users_id_fk" FOREIGN KEY ("admin_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'notifications_user_id_users_id_fk') THEN
+        ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tokens_user_id_users_id_fk') THEN
+        ALTER TABLE "tokens" ADD CONSTRAINT "tokens_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'login_session_user_id_users_id_fk') THEN
+        ALTER TABLE "login_session" ADD CONSTRAINT "login_session_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    END IF;
+END $$;--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "ledger_user_id_idx" ON "ledger" USING btree ("user_id","created_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "click_session_user_id_idx" ON "offer_click_sessions" USING btree ("user_id","created_at");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "completion_provider_transaction_idx" ON "offer_completions" USING btree ("provider","transaction_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "completion_status_unlock_idx" ON "offer_completions" USING btree ("status","unlock_at");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "postback_provider_transaction_idx" ON "postback_logs" USING btree ("provider","transaction_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "withdrawal_status_created_idx" ON "withdrawals" USING btree ("status","created_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "withdrawal_user_id_created_idx" ON "withdrawals" USING btree ("user_id","created_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "notification_user_created_idx" ON "notifications" USING btree ("user_id","created_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "notification_user_read_idx" ON "notifications" USING btree ("user_id","read_at");

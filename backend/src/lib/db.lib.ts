@@ -7,8 +7,23 @@ if (!Bun.env.DATABASE_URL) {
   process.exit(1);
 }
 
+let connectionString = Bun.env.DATABASE_URL;
+
+// Patch connection string to avoid SSL warnings if using deprecated modes
+if (
+  connectionString.includes("sslmode=require") ||
+  connectionString.includes("sslmode=prefer") ||
+  connectionString.includes("sslmode=verify-ca")
+) {
+  if (!connectionString.includes("uselibpqcompat=true")) {
+    connectionString += connectionString.includes("?")
+      ? "&uselibpqcompat=true"
+      : "?uselibpqcompat=true";
+  }
+}
+
 const client = new Client({
-  connectionString: Bun.env.DATABASE_URL,
+  connectionString,
   ssl: { rejectUnauthorized: false },
 });
 

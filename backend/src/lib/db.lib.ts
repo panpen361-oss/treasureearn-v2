@@ -9,7 +9,7 @@ if (!Bun.env.DATABASE_URL) {
 
 const client = new Client({
   connectionString: Bun.env.DATABASE_URL,
-  ssl: Bun.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  ssl: { rejectUnauthorized: false },
 });
 
 export async function connectDB(

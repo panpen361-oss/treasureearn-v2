@@ -1,13 +1,35 @@
-CREATE TYPE "public"."completion_status" AS ENUM('pending', 'locked', 'released', 'reversed');--> statement-breakpoint
-CREATE TYPE "public"."ledger_type" AS ENUM('offer_pending', 'offer_hold', 'offer_release', 'offer_reversal', 'withdraw_request', 'withdraw_approve', 'withdraw_deny_refund', 'admin_adjust', 'referral_bonus');--> statement-breakpoint
-CREATE TYPE "public"."notify_type" AS ENUM('offer_credit', 'offer_chargeback', 'withdraw_status', 'admin_alert', 'system');--> statement-breakpoint
-CREATE TYPE "public"."postback_status" AS ENUM('approved', 'denied', 'chargeback', 'pending');--> statement-breakpoint
-CREATE TYPE "public"."risk_tier" AS ENUM('low', 'medium', 'high', 'banned');--> statement-breakpoint
-CREATE TYPE "public"."role" AS ENUM('user', 'admin');--> statement-breakpoint
-CREATE TYPE "public"."token_type" AS ENUM('refresh', 'verification-email', 'reset-password', 'forgot-password', 'withdrawal');--> statement-breakpoint
-CREATE TYPE "public"."user_status" AS ENUM('active', 'banned');--> statement-breakpoint
-CREATE TYPE "public"."withdraw_method" AS ENUM('crypto_ltc', 'crypto_sol', 'crypto_eth', 'paypal', 'visa_virtual', 'ach', 'gc_roblox', 'gc_steam');--> statement-breakpoint
-CREATE TYPE "public"."withdraw_status" AS ENUM('pending', 'approved', 'paid', 'denied_refunded');--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'completion_status') THEN
+        CREATE TYPE "public"."completion_status" AS ENUM('pending', 'locked', 'released', 'reversed');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ledger_type') THEN
+        CREATE TYPE "public"."ledger_type" AS ENUM('offer_pending', 'offer_hold', 'offer_release', 'offer_reversal', 'withdraw_request', 'withdraw_approve', 'withdraw_deny_refund', 'admin_adjust', 'referral_bonus');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'notify_type') THEN
+        CREATE TYPE "public"."notify_type" AS ENUM('offer_credit', 'offer_chargeback', 'withdraw_status', 'admin_alert', 'system');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'postback_status') THEN
+        CREATE TYPE "public"."postback_status" AS ENUM('approved', 'denied', 'chargeback', 'pending');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'risk_tier') THEN
+        CREATE TYPE "public"."risk_tier" AS ENUM('low', 'medium', 'high', 'banned');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role') THEN
+        CREATE TYPE "public"."role" AS ENUM('user', 'admin');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'token_type') THEN
+        CREATE TYPE "public"."token_type" AS ENUM('refresh', 'verification-email', 'reset-password', 'forgot-password', 'withdrawal');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_status') THEN
+        CREATE TYPE "public"."user_status" AS ENUM('active', 'banned');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'withdraw_method') THEN
+        CREATE TYPE "public"."withdraw_method" AS ENUM('crypto_ltc', 'crypto_sol', 'crypto_eth', 'paypal', 'visa_virtual', 'ach', 'gc_roblox', 'gc_steam');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'withdraw_status') THEN
+        CREATE TYPE "public"."withdraw_status" AS ENUM('pending', 'approved', 'paid', 'denied_refunded');
+    END IF;
+END $$;--> statement-breakpoint
 CREATE TABLE "admin_action_logs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"admin_id" uuid NOT NULL,

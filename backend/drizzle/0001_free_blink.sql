@@ -1,1 +1,1 @@
-ALTER TABLE "users" ADD COLUMN "hashed_password" varchar(255) NOT NULL;
+ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "hashed_password" varchar(255) NOT NULL;

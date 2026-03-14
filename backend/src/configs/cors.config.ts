@@ -5,6 +5,7 @@ const devOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:3000",
+  "https://treasureearn-v2-git-main-treasure-earn.vercel.app"
 ];
 
 const prodOrigins = [

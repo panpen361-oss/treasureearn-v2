@@ -13,6 +13,7 @@ const navItems = [
     { label: 'Leaderboard', path: '/leaderboard', icon: '🏆' },
     { label: 'Referrals', path: '/referrals', icon: '👥' },
     { label: 'Privacy', path: '/privacy', icon: '🛡️' },
+    { label: 'Terms', path: '/terms', icon: '📄' },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {

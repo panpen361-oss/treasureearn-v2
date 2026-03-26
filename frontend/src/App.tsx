@@ -23,6 +23,7 @@ import { HomePage } from './pages/HomePage';
 import { EarnPage } from './pages/EarnPage';
 import { CashoutPage, LeaderboardPage, ReferralsPage } from './pages/SidebarPages';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
 
 function App() {
   const { fetchUser } = useAuthStore();
@@ -45,6 +46,7 @@ function App() {
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/referrals" element={<ReferralsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Route>
 
         {/* Auth routes - redirect to /home if already logged in */}
